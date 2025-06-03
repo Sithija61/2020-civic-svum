@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="si">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020 Civc</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-hover: #2980b9;
+            --bg-color: #f5f7fa;
+            --text-color: #333;
+            --heading-color: #2c3e50;
+            --card-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            --card-hover-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans Sinhala', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* Space logos and text evenly */
+            padding: 15px 20px;
+            background-color: #1a1a2e;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            margin-top: 20px;
+            /* Adjust spacing from the top */
+            position: relative;
+        }
+
+        .nav-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--bg-color);
+            text-align: center;
+            flex-grow: 1;
+            /* Push logos to the sides */
+        }
+
+        .logo {
+            height: 70px;
+            /* Adjust logo size */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .logo-link:hover .logo {
+            transform: scale(1.2);
+            /* Slightly enlarge on hover */
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.8);
+            /* Blue light effect */
+        }
+
+
+        h1 {
+            text-align: center;
+            color: var(--heading-color);
+            margin: 30px 0;
+            font-size: 32px;
+        }
+
+        .quiz-info {
+            background-color: #e8f4fc;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            height: 12px;
+        }
+
+        .progress-bar {
+            height: 12px;
+            border-radius: 10px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: var(--heading-color);
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .question:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--card-hover-shadow);
+        }
+
+        .question.answered {
+            border-left: 4px solid #2ecc71;
+        }
+
+        .question h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .answers {
+            padding: 5px 0;
+        }
+
+        .answer-option {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .answer-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .answer-option label {
+            display: block;
+            padding: 12px 15px 12px 45px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e0e0e0;
+            position: relative;
+        }
+
+        .answer-option label:before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            transition: all 0.2s;
+        }
+
+        .answer-option input[type="radio"]:checked+label {
+            background-color: #e3f2fd;
+            border-color: var(--primary-color);
+        }
+
+        .answer-option input[type="radio"]:checked+label:before {
+            border-color: var(--primary-color);
+            background-color: var(--primary-color);
+        }
+
+        .answer-option input[type="radio"]:checked+label:after {
+            content: '';
+            position: absolute;
+            left: 21px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .answer-option label:hover {
+            background-color: #f5f9ff;
+        }
+
+        button {
+            display: block;
+            margin: 30px auto;
+            padding: 14px 40px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button:disabled {
+            background-color: #a0a0a0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        #result {
+            margin: 30px auto;
+            max-width: 600px;
+            font-weight: bold;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .correct {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .incorrect {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .result-emoji {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .reset-btn {
+            background-color: #6c757d;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .feedback {
+            font-size: 15px;
+            margin-top: 15px;
+            font-style: italic;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .feedback-item {
+            margin-bottom: 8px;
+        }
+
+        .time-container {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .navbar {
+                padding: 10px 15px;
+            }
+
+            .nav-title {
+                font-size: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin: 20px 0;
+            }
+
+            .question {
+                padding: 15px;
+            }
+
+            .answer-option label {
+                padding: 10px 12px 10px 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="index.html" style="text-decoration: none;">
+        <div class="navbar">
+            <a href="index.html" class="logo-link">
+                <img src="images/logo.edu.png" alt="Education Logo" class="logo">
+            </a>
+            <span class="nav-title">SVUM Education Platform</span>
+            <a href="index.html" class="logo-link">
+                <img src="images/SVUM-2.png" alt="Brand Logo 1" class="logo">
+            </a>
+        </div>
+    </a>
+
+    <h1>Civic Education 2020</h1>
+
+    <div class="quiz-info">
+        <p><b>Number of Questions:</b> 40 | <b>Time:</b> Min 60 | <b>Marks:</b> 1 point per question</p>
+    </div>
+
+    <div class="time-container">
+        Time Left: <span id="timer">60:00</span>
+    </div>
+
+    <div class="progress-text">Progress: <span id="progressText">0%</span></div>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <form id="quizForm">
+        <!-- Question 1 -->
+        <div class="question" id="question1">
+            <h3>1. According to G.D.H. Cole's definition, the opportunity for developing one's personality sans external resistance is</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q1" id="q1a1" value="1">
+                    <label for="q1a1">rights.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q1" id="q1a2" value="2">
+                    <label for="q1a2">equality.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q1" id="q1a3" value="3">
+                    <label for="q1a3">freedom.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q1" id="q1a4" value="4">
+                    <label for="q1a4">justice.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question" id="question2">
+            <h3>2. What is the concept that refers to the implementation of decision arrived at through the consent of the parties in order to resolve a conflict?</h3>
+                <div class="answers">
+                    <div class="answer-option">
+                        <input type="radio" name="q2" id="q2a1" value="1">
+                        <label for="q2a1">Arbitration</label>
+                    </div>
+                    <div class="answer-option">
+                        <input type="radio" name="q2" id="q2a2" value="2">
+                        <label for="q2a2">Bargaining</label>
+                    </div>
+                    <div class="answer-option">
+                        <input type="radio" name="q2" id="q2a3" value="3">
+                        <label for="q2a3">Inquiry</label>
+                    </div>
+                    <div class="answer-option">
+                        <input type="radio" name="q2" id="q2a4" value="4">
+                        <label for="q2a4">mediation</label>
+                    </div>
+                </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question" id="question3">
+            <h3>3. If there are people of different cultures living in unity in a society that society is called</h3>
+            </h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q3" id="q3a1" value="1">
+                    <label for="q3a1">A multi-religious society.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q3" id="q3a2" value="2">
+                    <label for="q3a2">A multi-cultural society.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q3" id="q3a3" value="3">
+                    <label for="q3a3">A multi-ethnic society.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q3" id="q3a4" value="4">
+                    <label for="q3a4">A multi-national society.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question" id="question4">
+            <h3>4. Governing a country through people's representatives is</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q4" id="q4a1" value="1">
+                    <label for="q4a1">direct democracy.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q4" id="q4a2" value="2">
+                    <label for="q4a2">indirect democracy.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q4" id="q4a3" value="3">
+                    <label for="q4a3">people's democracy.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q4" id="q4a4" value="4">
+                    <label for="q4a4">civic democracy.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question" id="question5">
+            <h3>5. Sri Lanka's supreme law is</h3>
+            </h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q5" id="q5a1" value="1">
+                    <label for="q5a1">civil law.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q5" id="q5a2" value="2">
+                    <label for="q5a2">human right law.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q5" id="q5a3" value="3">
+                    <label for="q5a3">constitutional law.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q5" id="q5a4" value="4">
+                    <label for="q5a4">criminal law.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question" id="question6">
+            <h3>6. What is the payment for entrepreneurship as a factor of production?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q6" id="q6a1" value="1">
+                    <label for="q6a1">Wage</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q6" id="q6a2" value="2">
+                    <label for="q6a2">Rent</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q6" id="q6a3" value="3">
+                    <label for="q6a3">Interest</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q6" id="q6a4" value="4">
+                    <label for="q6a4">Profit</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question" id="question7">
+            <h3>7. What is the human right to which the right to peaceful assembly is included?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q7" id="q7a1" value="1">
+                    <label for="q7a1">Religious rights</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q7" id="q7a2" value="2">
+                    <label for="q7a2">Cultural rights</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q7" id="q7a3" value="3">
+                    <label for="q7a3">Political rights</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q7" id="q7a4" value="4">
+                    <label for="q7a4">Economical rights</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question" id="question8">
+            <h3>8. The two main techniques employed in production are</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q8" id="q8a1" value="1">
+                    <label for="q8a1">capital intensive and labour intensive.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q8" id="q8a2" value="2">
+                    <label for="q8a2">the state intensive and private intensive.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q8" id="q8a3" value="3">
+                    <label for="q8a3">technology intensive and capital intensive.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q8" id="q8a4" value="4">
+                    <label for="q8a4">consumer intensive and trade intensive.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question" id="question9">
+            <h3>9. The legal duty of citizens in a democratic society is</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q9" id="q9a1" value="1">
+                    <label for="q9a1">respecting traditions.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q9" id="q9a2" value="2">
+                    <label for="q9a2">ethical behaviour.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q9" id="q9a3" value="3">
+                    <label for="q9a3">acting according to religion.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q9" id="q9a4" value="4">
+                    <label for="q9a4">protecting public property.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question" id="question10">
+            <h3>10. What are the services provided by environment for human survival?
+            </h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q10" id="q10a1" value="1">
+                    <label for="q10a1">Services of protecting social environment</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q10" id="q10a2" value="2">
+                    <label for="q10a2">Garbage absorb services</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q10" id="q10a3" value="3">
+                    <label for="q10a3">Natural disaster managing services</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q10" id="q10a4" value="4">
+                    <label for="q10a4">Services of ensuring protection</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="question" id="question11">
+            <h3>11. Conflicts that occur within and among individuals are called</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q11" id="q11a1" value="1">
+                    <label for="q11a1">personal conflicts.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q11" id="q11a2" value="2">
+                    <label for="q11a2">social conflicts.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q11" id="q11a3" value="3">
+                    <label for="q11a3">intricate conflicts.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q11" id="q11a4" value="4">
+                    <label for="q11a4">family conflicts.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question" id="question12">
+            <h3>12. Who is the officer who assists the Attorney General?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q12" id="q12a1" value="1">
+                    <label for="q12a1">Inspector General of Police</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q12" id="q12a2" value="2">
+                    <label for="q12a2">Chief Justice</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q12" id="q12a3" value="3">
+                    <label for="q12a3">Minister of Justice</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q12" id="q12a4" value="4">
+                    <label for="q12a4">Solicitor General</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question" id="question13">
+            <h3>13. The head of a Municipal Council in Sri Lanka is</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q13" id="q13a1" value="1">
+                    <label for="q13a1">mayor.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q13" id="q13a2" value="2">
+                    <label for="q13a2">Chief Secretary.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q13" id="q13a3" value="3">
+                    <label for="q13a3">Chairman.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q13" id="q13a4" value="4">
+                    <label for="q13a4">Commissioner.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question" id="question14">
+            <h3>14. The power of appointing the chief minister of a Provincial council is with</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q14" id="q14a1" value="1">
+                    <label for="q14a1">President</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q14" id="q14a2" value="2">
+                    <label for="q14a2">Governor</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q14" id="q14a3" value="3">
+                    <label for="q14a3">Leader of the party</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q14" id="q14a4" value="4">
+                    <label for="q14a4">Chairman of the Election Commissioner</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question" id="question15">
+            <h3>15. What is the higher court to which a decision of a primary magistrate court can be appealed?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q15" id="q15a1" value="1">
+                    <label for="q15a1">Court of appeal</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q15" id="q15a2" value="2">
+                    <label for="q15a2">Supreme Court</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q15" id="q15a3" value="3">
+                    <label for="q15a3">District Court</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q15" id="q15a4" value="4">
+                    <label for="q15a4">Provincial High Court</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question" id="question16">
+            <h3>16. The geographical factor that has contributed make Sri Lanka a multi-cultural society is</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q16" id="q16a1" value="1">
+                    <label for="q16a1">being a South Asian country.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q16" id="q16a2" value="2">
+                    <label for="q16a2">being located in the middle of Indian ocean.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q16" id="q16a3" value="3">
+                    <label for="q16a3">having a coast suitable for tourists.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q16" id="q16a4" value="4">
+                    <label for="q16a4">location of a natural harbour in Trincomalee.</label>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Question 17 -->
+        <div class="question" id="question17">
+            <h3>17. Select the option contains only the environmental problems caused by natural phenomena
+            </h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q17" id="q17a1" value="1">
+                    <label for="q17a1">earthquakes, droughts, volcanoes</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q17" id="q17a2" value="2">
+                    <label for="q17a2">landslips, tornado, air pollution</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q17" id="q17a3" value="3">
+                    <label for="q17a3">earthquakes, floods, water pollution</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q17" id="q17a4" value="4">
+                    <label for="q17a4">storms, deforestation, wild fire</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question" id="question18">
+            <h3>18. Modern states with democratic governments strive for</h3>
+            </h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q18" id="q18a1" value="1">
+                    <label for="q18a1">coordinating communication services.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q18" id="q18a2" value="2">
+                    <label for="q18a2">affirming democratic principles.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q18" id="q18a3" value="3">
+                    <label for="q18a3">confirming globalization goals.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q18" id="q18a4" value="4">
+                    <label for="q18a4">building the nation within cultural diversity.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question" id="question19">
+            <h3>19. What is the organization established by the United States after the second world war in partnership with European countries?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q19" id="q19a1" value="1">
+                    <label for="q19a1">BIMSTEC</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q19" id="q19a2" value="2">
+                    <label for="q19a2">ASEAN</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q19" id="q19a3" value="3">
+                    <label for="q19a3">NATO</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q19" id="q19a4" value="4">
+                    <label for="q19a4">UNESCO</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="question" id="question20">
+            <h3>20. In what category of conficts does the ethic confict which was existed for 30 years in Sri Lanka belong to?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q20" id="q20a1" value="1">
+                    <label for="q20a1">Personal conflicts</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q20" id="q20a2" value="2">
+                    <label for="q20a2">Social conflics</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q20" id="q20a3" value="3">
+                    <label for="q20a3">Religious conflicts</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q20" id="q20a4" value="4">
+                    <label for="q20a4">Economical conflicts</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 21 -->
+        <div class="question" id="question21">
+            <h3>21. What is the permanent member country of the UN Security Council which holds the power of veto?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q21" id="q21a1" value="1">
+                    <label for="q21a1">France</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q21" id="q21a2" value="2">
+                    <label for="q21a2">Canada</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q21" id="q21a3" value="3">
+                    <label for="q21a3">Japan</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q21" id="q21a4" value="4">
+                    <label for="q21a4">Germany</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 22 -->
+        <div class="question" id="question22">
+            <h3>22. What is the name of the supreme governing body of the Greek city-state?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q22" id="q22a1" value="1">
+                    <label for="q22a1">Senate</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q22" id="q22a2" value="2">
+                    <label for="q22a2">Executive council</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q22" id="q22a3" value="3">
+                    <label for="q22a3">Citizens' council</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q22" id="q22a4" value="4">
+                    <label for="q22a4">Governing council</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 23 -->
+        <div class="question" id="question23">
+            <h3>23. The sovereignty of a state rests with</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q23" id="q23a1" value="1">
+                    <label for="q23a1">the Executive.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q23" id="q23a2" value="2">
+                    <label for="q23a2">the Parliament.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q23" id="q23a3" value="3">
+                    <label for="q23a3">the Judiciary.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q23" id="q23a4" value="4">
+                    <label for="q23a4">the people.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 24 -->
+        <div class="question" id="question24">
+            <h3>24. What is the answer which indicates one of the main aspects of maintaining international relations?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q24" id="q24a1" value="1">
+                    <label for="q24a1">Cultural strategic relations</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q24" id="q24a2" value="2">
+                    <label for="q24a2">Military strategic relations</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q24" id="q24a3" value="3">
+                    <label for="q24a3">Political strategic relations</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q24" id="q24a4" value="4">
+                    <label for="q24a4">Religious strategic relations</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 25 -->
+        <div class="question" id="question25">
+            <h3>25. An important feature introduced to Sri Lanka by the 1978 constitution for the first time is</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q25" id="q25a1" value="1">
+                    <label for="q25a1">the Post of Governor General.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q25" id="q25a2" value="2">
+                    <label for="q25a2">the Legislative Council.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q25" id="q25a3" value="3">
+                    <label for="q25a3">the Elections Commission.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q25" id="q25a4" value="4">
+                    <label for="q25a4">the Executive Presidential system.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 26 -->
+        <div class="question" id="question26">
+            <h3>26. What is the power of Central Government indicated in the Reserved List of 13" amendment to the 1978 constitution?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q26" id="q26a1" value="1">
+                    <label for="q26a1">National Housing and Construction</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q26" id="q26a2" value="2">
+                    <label for="q26a2">Census and Statistics</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q26" id="q26a3" value="3">
+                    <label for="q26a3">Social Service and Rehabilitation</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q26" id="q26a4" value="4">
+                    <label for="q26a4">Agriculture and Agrarian Services</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 27 -->
+        <div class="question" id="question27">
+            <h3>27. Select the answer which contains the components that are used in calculating the Human Development
+                Index.</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q27" id="q27a1" value="1">
+                    <label for="q27a1">Per Capita Income adjusted by the purchasing power, Education, Life expectancy at birth</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q27" id="q27a2" value="2">
+                    <label for="q27a2">Per Capita Income adjusted by the purchasing power, Gross Domestic Product, Maternal mortality ratio</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q27" id="q27a3" value="3">
+                    <label for="q27a3">Per Capia income adjusted by the purchasing power, infant mortality ratio, Net National product</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q27" id="q27a4" value="4">
+                    <label for="q27a4">Per Capita Income adjusted by the purchasing power, Foreign debt ratio, Adult literacy.</label>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Question 28 -->
+        <div class="question" id="question28">
+            <h3>28. What is the most influential reason for cultural blending in the modern world?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q28" id="q28a1" value="1">
+                    <label for="q28a1">Geographical location of countries</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q28" id="q28a2" value="2">
+                    <label for="q28a2">Expansion of trade relations</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q28" id="q28a3" value="3">
+                    <label for="q28a3">Subjugation to Western countries</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q28" id="q28a4" value="4">
+                    <label for="q28a4">Becoming a global village</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 29 -->
+        <div class="question" id="question29">
+            <h3>29. Galtun's triangular struggle conflict model is shown below. <br>
+                <center><img src="1.png" alt="" width="200" height="auto"></center> <br>
+                What is the option which indicates A, B and C respectively in this?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q29" id="q29a1" value="1">
+                    <label for="q29a1">Behaviour, Attitudes, Beliefs</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q29" id="q29a2" value="2">
+                    <label for="q29a2">Behaviour, Context, Attitudes</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q29" id="q29a3" value="3">
+                    <label for="q29a3">Attitudes, Context, Habits</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q29" id="q29a4" value="4">
+                    <label for="q29a4">Context, Environment, Relationships</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 30 -->
+        <div class="question" id="question30">
+            <h3>30. The right of the people, above a certain age, to elect their rulers is called
+            </h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q30" id="q30a1" value="1">
+                    <label for="q30a1">universal franchise</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q30" id="q30a2" value="2">
+                    <label for="q30a2">sovereign franchise.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q30" id="q30a3" value="3">
+                    <label for="q30a3">proportional voting.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q30" id="q30a4" value="4">
+                    <label for="q30a4">delegative voting.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 31 -->
+        <div class="question" id="question31">
+            <h3>31. The members of the American Senate are appointed by</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q31" id="q31a1" value="1">
+                    <label for="q31a1">the president</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q31" id="q31a2" value="2">
+                    <label for="q31a2">the federal judiciary.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q31" id="q31a3" value="3">
+                    <label for="q31a3">the voters of states</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q31" id="q31a4" value="4">
+                    <label for="q31a4">the congress.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 32 -->
+        <div class="question" id="question32">
+            <h3>32. Select from the following statements which is not a workers' right.</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q32" id="q32a1" value="1">
+                    <label for="q32a1">Working in accordance with the goals of the institution.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q32" id="q32a2" value="2">
+                    <label for="q32a2">Working in an eight hour service duration.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q32" id="q32a3" value="3">
+                    <label for="q32a3">The ability to obtain leave.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q32" id="q32a4" value="4">
+                    <label for="q32a4">Obtaining the job security.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 33 -->
+        <div class="question" id="question33">
+            <h3>33. A country that exists a federal system of government is</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q33" id="q33a1" value="1">
+                    <label for="q33a1">Great Britain</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q33" id="q33a2" value="2">
+                    <label for="q33a2">Sri Lanka.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q33" id="q33a3" value="3">
+                    <label for="q33a3">Russia.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q33" id="q33a4" value="4">
+                    <label for="q33a4">Switzerland.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 34 -->
+        <div class="question" id="question34">
+            <h3>34. A factor necessary for the success of a democratic system of government is</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q34" id="q34a1" value="1">
+                    <label for="q34a1">existence of the supremacy of law.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q34" id="q34a2" value="2">
+                    <label for="q34a2">ability to present people's problems</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q34" id="q34a3" value="3">
+                    <label for="q34a3">eradication of poverty.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q34" id="q34a4" value="4">
+                    <label for="q34a4">strengthening foreign relations.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 35 -->
+        <div class="question" id="question35">
+            <h3>35. In which of the following system of elections, giving voters freedom to express their political opinoin without any undue influence, is a basic feature?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q35" id="q35a1" value="1">
+                    <label for="q35a1">a peaceful election</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q35" id="q35a2" value="2">
+                    <label for="q35a2">a free election</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q35" id="q35a3" value="3">
+                    <label for="q35a3">a national election</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q35" id="q35a4" value="4">
+                    <label for="q35a4">pro-people election</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 36 -->
+        <div class="question" id="question36">
+            <h3>36. A public health service entrusted to local goverment bodies in Sri Lanka is </h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q36" id="q36a1" value="1">
+                    <label for="q36a1">maintaining public bathing places.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q36" id="q36a2" value="2">
+                    <label for="q36a2">laying pipes for cleaning services.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q36" id="q36a3" value="3">
+                    <label for="q36a3">maintainging playgrounds.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q36" id="q36a4" value="4">
+                    <label for="q36a4">improving hygenic conditions of people.</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 37 -->
+        <div class="question" id="question37">
+            <h3>37. What is the concept which describes the human rights guaranteed in the Sri Lankan constitution?</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q37" id="q37a1" value="1">
+                    <label for="q37a1">Social rights</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q37" id="q37a2" value="2">
+                    <label for="q37a2">People's right</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q37" id="q37a3" value="3">
+                    <label for="q37a3">Fundamental rights</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q37" id="q37a4" value="4">
+                    <label for="q37a4">Civil rights</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 38 -->
+        <div class="question" id="question38">
+            <h3>38. Select a negative impact of globalization on Sri Lanka.</h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q38" id="q38a1" value="1">
+                    <label for="q38a1">Increasing brain-drain</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q38" id="q38a2" value="2">
+                    <label for="q38a2">Diversification of the economy</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q38" id="q38a3" value="3">
+                    <label for="q38a3">Balancing the trade deficit</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q38" id="q38a4" value="4">
+                    <label for="q38a4">Inflow of new technology</label>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Question 39 -->
+        <div class="question" id="question39">
+            <h3>39. Part A indicates the characteristics of different economic systems and part B the names of the economic systems. <br>
+                <center><img src="2.png" alt="" width="700" height="auto"></center> <br>
+                What if the, correct order of Economic systems when column 'B' is matched according to the order of Column 'A'?
+            </h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q39" id="q39a1" value="1">
+                    <label for="q39a1">CADB</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q39" id="q39a2" value="2">
+                    <label for="q39a2">CDAB</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q39" id="q39a3" value="3">
+                    <label for="q39a3">DABC</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q39" id="q39a4" value="4">
+                    <label for="q39a4">DACB</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 40 -->
+        <div class="question" id="question40">
+            <h3>40. Consider the statements 'A' and 'B' given below. <br><br>
+                A - Good governance leads to a system of public administration without vice and corruption. <br>
+B - Media freedom is ensured in every democratic state. <br><br>
+Out of these statements,
+            </h3>
+            <div class="answers">
+                <div class="answer-option">
+                    <input type="radio" name="q40" id="q40a1" value="1">
+                    <label for="q40a1">Statement A explains statement B.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q40" id="q40a2" value="2">
+                    <label for="q40a2">Both Statements A and B are correct.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q40" id="q40a3" value="3">
+                    <label for="q40a3">Statement A is incorrect and B is correct.</label>
+                </div>
+                <div class="answer-option">
+                    <input type="radio" name="q40" id="q40a4" value="4">
+                    <label for="q40a4">Statement A is correct and B is incorrect.</label>
+                </div>
+            </div>
+        </div>
+
+
+        <button type="button" id="submitBtn" onclick="checkAnswers()">Submit Answers</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        const correctAnswers = {
+            q1: "3", q2: "1", q3: "2", q4: "2", q5: "3",
+            q6: "4", q7: "3", q8: "1", q9: "4", q10: "2",
+            q11: "3", q12: "4", q13: "1", q14: "2", q15: "4",
+            q16: "2", q17: "1", q18: "4", q19: "3", q20: "2",
+            q21: "1", q22: "3", q23: "4", q24: "2", q25: "4",
+            q26: "2", q27: "1", q28: "4", q29: "2", q30: "1",
+            q31: "3", q32: "1", q33: "4", q34: "1", q35: "2",
+            q36: "4", q37: "3", q38: "1", q39: "4", q40: "4"
+        };
+
+        
+        let timeLeft = 60 * 60; // 10 minutes
+        let timerInterval;
+
+        function startTimer() {
+            timerInterval = setInterval(function () {
+                timeLeft--;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    checkAnswers();
+                    return;
+                }
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById("timer").textContent =
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                if (timeLeft < 60) {
+                    document.getElementById("timer").style.color = "#e74c3c";
+                } else if (timeLeft < 180) {
+                    document.getElementById("timer").style.color = "#f39c12";
+                }
+            }, 1000);
+        }
+
+       
+        function updateProgress() {
+            const totalQuestions = 40;
+            let answeredQuestions = 0;
+            for (let i = 1; i <= totalQuestions; i++) {
+                const selected = document.querySelector('input[name="q' + i + '"]:checked');
+                if (selected) answeredQuestions++;
+            }
+            const progressPercentage = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById("progressBar").style.width = progressPercentage + "%";
+            document.getElementById("progressText").textContent = Math.round(progressPercentage) + "%";
+        }
+
+        function checkAnswers() {
+            clearInterval(timerInterval);
+
+            let score = 0;
+            let wrongQuestions = [];
+            let feedbackMessages = [];
+
+            for (let i = 1; i <= 40; i++) {
+                const questionName = "q" + i;
+                const selected = document.querySelector('input[name="' + questionName + '"]:checked');
+                if (selected) {
+                    if (selected.value === correctAnswers[questionName]) {
+                        score++;
+                    } else {
+                        wrongQuestions.push(i);
+                        const correctAnswerElement = document.querySelector(`#${questionName}a${correctAnswers[questionName]}`);
+                        const correctAnswerText = correctAnswerElement?.nextElementSibling?.textContent.trim() || "(Correct answer not found.)";
+                        feedbackMessages.push(`<div class="feedback-item">Question ${i}: Correct answer - ${correctAnswerText}</div>`);
+                    }
+                } else {
+                    wrongQuestions.push(i);
+                    feedbackMessages.push(`<div class="feedback-item">Question ${i}: No question selected.</div>`);
+                }
+            }
+
+            const resultDiv = document.getElementById("result");
+            let emoji = "";
+            let message = "";
+
+            if (score === 40) {
+                emoji = "🎉";
+                message = "All answers are correct! Excellent!";
+            } else if (score >= 30) {
+                emoji = "🙂";
+                message = `Your score: ${score}/40 - Good!`;
+            } else {
+                emoji = "😕";
+                message = `Your score: ${score}/40 - try again.`;
+            }
+
+            const timeSpent = 10 * 60 - timeLeft;
+            const minutes = Math.floor(timeSpent / 60);
+            const seconds = timeSpent % 60;
+            const timeMessage = `Elapsed time: ${minutes}m ${seconds}s`;
+
+            let feedbackHTML = "";
+            if (feedbackMessages.length > 0) {
+                feedbackHTML = "<div class='feedback'>" + feedbackMessages.join("") + "</div>";
+            }
+
+            resultDiv.innerHTML = `
+                <div class="result-emoji">${emoji}</div>
+                <h2>${message}</h2>
+                <p>${timeMessage}</p>
+                ${feedbackHTML}
+                <button type="button" class="reset-btn" onclick="resetQuiz()">Try again.</button>
+            `;
+            resultDiv.className = score === 40 ? "correct" : "incorrect";
+            resultDiv.style.display = "block";
+
+            document.getElementById("submitBtn").disabled = true;
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            const allInputs = document.querySelectorAll('input[type="radio"]');
+            allInputs.forEach(input => { input.checked = false; });
+
+            document.getElementById("progressBar").style.width = "0%";
+            document.getElementById("progressText").textContent = "0%";
+
+            const questions = document.querySelectorAll('.question');
+            questions.forEach(question => { question.classList.remove('answered'); });
+
+            const resultDiv = document.getElementById("result");
+            resultDiv.style.display = "none";
+            resultDiv.innerHTML = "";
+
+            document.getElementById("submitBtn").disabled = false;
+
+            clearInterval(timerInterval);
+            timeLeft = 10 * 60;
+            document.getElementById("timer").textContent = "10:00";
+            document.getElementById("timer").style.color = "inherit";
+            startTimer();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.onload = function () {
+            startTimer();
+
+            const allInputs = document.querySelectorAll('input[type="radio"]');
+            allInputs.forEach(input => {
+                input.addEventListener('change', function () {
+                    updateProgress();
+                    const questionDiv = this.closest('.question');
+                    questionDiv.classList.add('answered');
+                });
+            });
+        };
+    </script>
+
+</body>
+
+</html>
